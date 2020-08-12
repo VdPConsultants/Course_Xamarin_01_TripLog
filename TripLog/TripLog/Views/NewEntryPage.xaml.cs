@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using TripLog.Services;
 using TripLog.ViewModels;
+
 
 namespace TripLog.Views
 {
@@ -20,7 +22,7 @@ namespace TripLog.Views
         {
             InitializeComponent();
             BindingContextChanged += Page_BindingContextChanged;
-            BindingContext = new NewEntryViewModel();
+            BindingContext = new NewEntryViewModel(DependencyService.Get<INavService>());
         }
         void Page_BindingContextChanged(object sender, EventArgs e)
         {

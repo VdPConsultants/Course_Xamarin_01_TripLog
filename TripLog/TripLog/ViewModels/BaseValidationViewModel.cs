@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using TripLog.Services;
 
 namespace TripLog.ViewModels
 {
@@ -12,7 +13,7 @@ namespace TripLog.ViewModels
     { 
         readonly IDictionary<string, List<string>> _errors = 
         new Dictionary<string, List<string>>();
-        public BaseValidationViewModel()
+        public BaseValidationViewModel(INavService navService) : base(navService)
         {
         }
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
