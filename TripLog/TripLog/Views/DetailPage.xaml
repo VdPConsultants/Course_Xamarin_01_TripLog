@@ -3,9 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
              mc:Ignorable="d"
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             xmlns:converters="clr-namespace:TripLog.Converters;assembly=TripLog"
              x:Class="TripLog.Views.DetailPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:RatingToStarImageNameConverter x:Key="RatingToStartImageNameConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
@@ -19,7 +25,7 @@
             <StackLayout Padding="10" Grid.Row="1">
                 <Label x:Name="title" HorizontalOptions="Center" Text="{Binding Entry.Title}" />
                 <Label x:Name="date" HorizontalOptions="Center" Text="{Binding Entry.Date, StringFormat='{0:M}'}" />
-                <Label x:Name="rating" HorizontalOptions="Center" Text="{Binding Entry.Rating, StringFormat='{0} star rating'}" />
+                <Image HorizontalOptions="Center" Source="{Binding Entry.Rating, Converter={StaticResource RatingToStartImageNameConverter}}" />
                 <Label x:Name="notes" HorizontalOptions="Center" Text="{Binding Entry.Notes}" />
             </StackLayout>
         </Grid>
