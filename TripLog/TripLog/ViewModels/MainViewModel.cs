@@ -6,14 +6,18 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 
+using Akavache;
+
 using TripLog.Models;
 using TripLog.Services;
-
 
 namespace TripLog.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
+        readonly ITripLogDataService _tripLogService;
+        readonly IBlobCache _cache;
+
         ObservableCollection<TripLogEntry> _logEntries;
         public ObservableCollection<TripLogEntry> LogEntries
         {
@@ -25,49 +29,35 @@ namespace TripLog.ViewModels
             }
         }
 
-        public MainViewModel(INavService navService) : base(navService)
+        public MainViewModel(INavService navService, ITripLogDataService tripLogService, IBlobCache cache) : base(navService)
         {
+            _tripLogService = tripLogService;
+            _cache = cache;
             LogEntries = new ObservableCollection<TripLogEntry>();
         }
         public override void Init()
         {
             LoadEntries();
         }
-        void LoadEntries()
+        async void LoadEntries()
         {
-            LogEntries.Clear();
-            // TODO: Remove this in chapter 6 
-            Task.Delay(3000).ContinueWith(_ => Device.BeginInvokeOnMainThread(() =>
+            if (IsBusy)
+                return;
+            IsBusy = true;
+            try
             {
-                LogEntries.Add(new TripLogEntry
-                {
-                    Title = "Washington Monument",
-                    Notes = "Amazing!",
-                    Rating = 3,
-                    Date = new DateTime(2019, 2, 5),
-                    Latitude = 38.8895,
-                    Longitude = -77.0352
-                });
-                LogEntries.Add(new TripLogEntry
-                {
-                    Title = "Statue of Liberty",
-                    Notes = "Inspiring!",
-                    Rating = 4,
-                    Date = new DateTime(2019, 4, 13),
-                    Latitude = 40.6892,
-                    Longitude = -74.0444
-                });
-                LogEntries.Add(new TripLogEntry
-                {
-                    Title = "Golden Gate Bridge",
-                    Notes = "Foggy, but beautiful.",
-                    Rating = 5,
-                    Date = new DateTime(2019, 4, 26),
-                    Latitude = 37.8268,
-                    Longitude = -122.4798
-                });
+                // Load from local cache and then immediately load from API
+                _cache.GetAndFetchLatest("entries", async () => await _tripLogService.GetEntriesAsync())
+                    .Subscribe(entries =>
+                    {
+                        LogEntries = new ObservableCollection<TripLogEntry>(entries);
+                        IsBusy = false;
+                    });
+            }
+            finally
+            {
                 IsBusy = false;
-            }));
+            }
         }
         public Command<TripLogEntry> ViewCommand =>
             new Command<TripLogEntry>(async entry =>
