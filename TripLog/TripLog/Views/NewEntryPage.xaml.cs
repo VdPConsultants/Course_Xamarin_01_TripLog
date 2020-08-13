@@ -11,7 +11,6 @@ using Xamarin.Forms.Xaml;
 using TripLog.Services;
 using TripLog.ViewModels;
 
-
 namespace TripLog.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -22,7 +21,6 @@ namespace TripLog.Views
         {
             InitializeComponent();
             BindingContextChanged += Page_BindingContextChanged;
-            BindingContext = new NewEntryViewModel(DependencyService.Get<INavService>());
         }
         void Page_BindingContextChanged(object sender, EventArgs e)
         {

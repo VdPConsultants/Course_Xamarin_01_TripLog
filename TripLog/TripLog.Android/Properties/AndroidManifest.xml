@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.companyname.triplog">
     <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="28" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <application android:label="TripLog.Android">
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATIONE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION " />
+  <application android:label="TripLog.Android">
       <meta-data
         android:name="com.google.android.maps.v2.API_KEY"
         android:value="AIzaSyBiM2-vgNrslOq__8MrE1033Sl7QF0k5OU" />
